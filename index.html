@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GOATCOIN -- The Gold Of The Trenches</title>
+  <meta name="description" content="BEERS is a digital reflection of the oldest safe asset, made for degen. The BEERS of the Trenches." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+	* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(270deg, #667eea, #764ba2, #f093fb, #f5576c);
+      background-size: 800% 800%;
+      animation: gradientBG 18s ease infinite;
+      color: #fff;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 0;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Canvas Particles */
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      animation: fadeInDown 1s ease;
+    }
+
+    h1 {
+      font-size: 4em;
+      margin-bottom: 10px;
+      text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      font-size: 1.5em;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    /* Hero Image */
+    .hero-image {
+      text-align: center;
+      margin: 40px 0;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .hero-image img {
+      max-width: 400px;
+      width: 100%;
+      display: block;
+      margin: 0 auto;
+      border-radius: 12px;
+      transition: transform 0.5s ease;
+    }
+
+    .hero-image img:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .greentext {
+      background: rgba(14, 37, 27, 0.95);
+      border: 2px solid #789922;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 800px;
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #89c540;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .greentext.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .arrow { color: #89c540; margin-right: 8px; }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 40px 0;
+      animation: fadeInUp 1s ease;
+    }
+
+    .btn, .social-btn {
+      padding: 18px 40px;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: pulse 2.5s infinite;
+    }
+
+    .btn:hover, .social-btn:hover {
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+      animation: bounce 0.6s;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255,255,255, 0.6);
+      }
+      70% {
+        box-shadow: 0 0 0 15px rgba(255,255,255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.05); }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+    }
+
+    .social-btn {
+      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+      padding: 15px 35px;
+      border-radius: 30px;
+      font-size: 1em;
+    }
+
+    .contract-section {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 40px auto;
+      max-width: 900px;
+      text-align: center;
+      border: 2px solid rgba(255,255,255,0.2);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+    }
+
+    .contract-section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contract-address {
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      word-break: break-all;
+      margin: 15px 0;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .copy-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .copy-btn:hover {
+      background: #45a049;
+      transform: scale(1.05);
+    }
+
+    .section {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 40px;
+      margin: 30px auto;
+      max-width: 900px;
+      border: 2px solid rgba(255,255,255,0.2);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+    }
+
+    .section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section h2 {
+      font-size: 2.5em;
+      margin-bottom: 25px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .community-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 60px;
+      font-size: 1.2em;
+    }
+
+    .rocket {
+      display: inline-block;
+      animation: rocketFly 2s ease-in-out infinite;
+      font-size: 1.5em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rocketFly {
+      0%, 100% { transform: translateY(0px) rotate(45deg); }
+      50% { transform: translateY(-10px) rotate(45deg); }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5em; }
+      .subtitle { font-size: 1.2em; }
+      .greentext { font-size: 1em; padding: 20px; }
+      .section { padding: 25px; }
+      .buttons { flex-direction: column; align-items: center; }
+      .btn { width: 80%; text-align: center; }
+      .social-btn { width: 80%; text-align: center; }
+    }
+  </style>
+</head>
+<body> 
+
+  <header class="relative z-50" role="banner">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="mt-4 flex items-center justify-between rounded-2xl border border-[var(--border)]/80 bg-[var(--bg2)]/70 px-4 py-3 backdrop-blur-md">
+      <a href="#top" class="flex items-center gap-3 focus-ring" aria-label="Beranda BEERS">
+        <!-- Emblem -->
+        <img src="https://media2.giphy.com/media/XHWUc7qZNwDpT2KHE3/giphy.gif?cid=9b38fe913mhdo5pjr6yqcp0f3ubonjsbhwtfz7l90y8gupf6&ep=v1_gifs_username&rid=giphy.gif&ct=s" class="h-12 w-12 rounded-lg" />
+        <div class="text-lg font-extrabold tracking-wide">
+          <span class="gold-gradient">GOATCOIN</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-2" aria-label="Utama">
+        <a href="#about" class="btn btn-outline focus-ring">About</a>
+        <a href="#community" class="btn btn-outline focus-ring">Community</a>
+        <a href="#buy" class="btn btn-outline focus-ring">Buy</a>
+      </nav>
+
+      <!-- Official X Account ke kanan -->
+      <div class="flex items-center gap-2 ml-auto">
+        <a href="https://x.com/donjuchady" target="_blank" rel="noopener" class="h-13 w-15 rounded-lg" aria-label="Official X Account">
+          Official X Account
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  <main id="top">
+    <section class="relative">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr,auto] gap-8 items-start">
+          <div class="hidden lg:flex flex-col items-center gap-4 reveal">
+            <div class="split-text text-sm text-[var(--muted)]">BEERSitustandardinternasionaluntukasetfisikgold.</div>
+          </div>
+
+          <div class="flex flex-col items-center text-center">
+            <img src="https://media3.giphy.com/media/jWU4REOs4cHAqUHko3/giphy.gif?cid=9b38fe914sg3rj1nwbsfqavzho7nhalg2f5ccfsxlujvvgqc&ep=v1_gifs_username&rid=giphy.gif&ct=g" alt="SHROOMIE MOOD" class="h-13 w-15 rounded-lg" />
+            <p class="hero-sub mt-4 max-w-2xl text-[var(--muted)] reveal" style="transition-delay:120ms;">
+              GOATCOIN is a meme token that was born from a mysterious capsule, then turned into a cute and legendary goat. GOATCOIN is not just a coin, but a representation of the spirit of "The Herd"
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-3 reveal" style="transition-delay:200ms;">
+              <a href="https://dexscreener.com/solana/Gxwy8yjgsPbFyHCvSxf3K2dL598VWP6S4tNBk6qE22ZS" target="_blank" rel="noopener" class="btn btn-gold focus-ring">Buy $GOATCOIN</a>
+              <a href="https://x.com/i/communities/1973247905936056514" target="_blank" rel="noopener" class="btn btn-outline focus-ring">Join X Community</a>
+            </div>
+
+            <div class="mt-10 grid w-full grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="card p-5 text-center reveal">
+                <div class="text-xs uppercase tracking-wider text-[var(--muted)]">Token Data</div>
+                <div id="tokenData" class="mt-2 text-sm">Loading token data<span class="dots"></span></div>
+              </div>
+              <div class="card p-5 text-center reveal" style="transition-delay:100ms;">
+                <div class="text-xs uppercase tracking-wider text-[var(--muted)]">Liquidity</div>
+                <div id="liquidityData" class="mt-2 text-sm">Loading token data<span class="dots"></span></div>
+              </div>
+              <div class="card p-5 text-center reveal" style="transition-delay:180ms;">
+                <div class="text-xs uppercase tracking-wider text-[var(--muted)]">Holders</div>
+                <div id="holdersData" class="mt-2 text-sm">Loading token data<span class="dots"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden lg:flex flex-col items-center gap-4 reveal">
+            <div class="split-text text-sm text-[var(--muted)]">ThisistheGoldOfTheTrenches.</div>
+          </div>
+        </div>
+      </div>
+
+		<section class="investor-vertical">
+  <h3 class="section-title">
+    Backed by<br><span class="muted">Premier Investors</span>
+  </h3>
+
+  <div class="logo-box">
+    <div class="logo-track">
+      <!-- Logo aslinya -->
+      <div class="logo-item"><img src="https://i.ibb.co.com/qYLdSWfg/IMG-3071.png" alt="Investor 1"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/KcCDMJJd/IMG-3070.png" alt="Investor 2"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/YFSddBrY/IMG-3069.png" alt="Investor 3"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/0ybhvNLd/IMG-3068.png" alt="Investor 4"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/j9PwdGt3/IMG-3067.png" alt="Investor 5"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/tTHwMLtg/IMG-3066.png" alt="Investor 6"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/KjtSK24X/IMG-3065.png" alt="Investor 7"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/W4y2mwKk/IMG-3064.png" alt="Investor 8"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/RTbcBKtN/IMG-3078.png" alt="Investor 9"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/GyBQxnx/IMG-3077.png" alt="Investor 9"></div>
+
+      <!-- Duplikat untuk seamless scroll -->
+      <div class="logo-item"><img src="https://i.ibb.co.com/qYLdSWfg/IMG-3071.png" alt="" aria-hidden="true"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/KcCDMJJd/IMG-3070.png" alt="" aria-hidden="true"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/YFSddBrY/IMG-3069.png" alt="" aria-hidden="true"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/0ybhvNLd/IMG-3068.png" alt="" aria-hidden="true"></div>
+      <div class="logo-item"><img src="https://i.ibb.co.com/j9PwdGt3/IMG-3067.png" alt="" aria-hidden="true"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/tTHwMLtg/IMG-3066.png" alt="" aria-hidden="true"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/KjtSK24X/IMG-3065.png" alt="" aria-hidden="true"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/W4y2mwKk/IMG-3064.png" alt="" aria-hidden="true"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/RTbcBKtN/IMG-3078.png" alt="" aria-hidden="true"></div>
+			<div class="logo-item"><img src="https://i.ibb.co.com/GyBQxnx/IMG-3077.png" alt="" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+.section-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.section-title .muted {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* Kotak transparan full lebar */
+.logo-box {
+  width: 100%;
+  max-width: 100vw;
+  height: 200px;        /* tinggi area */
+  overflow: hidden;
+  background: transparent;
+  position: relative;
+}
+
+/* Track berjalan */
+.logo-track {
+  display: flex;
+  flex-direction: column;
+  /* trik utama: pakai translateY tanpa reset */
+  animation: scroll-up 20s linear infinite;
+}
+
+/* Logo */
+.logo-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}
+.logo-item img {
+  max-height: 60px;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+/* animasi berjalan terus tanpa reset visual */
+@keyframes scroll-up {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); } /* hanya setengah, jadi seamless */
+}
+</style>
+
+		
+    <section id="about" class="relative">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card p-6 reveal">
+            <h2 class="text-2xl font-bold gold-gradient">The GOATCOIN of the Trenches</h2>
+            <p class="mt-4 text-[var(--muted)] leading-relaxed">
+              The GOATCOIN of the Trenches is a meme token that was born not from the peak of glory, but from the bottom of the trenches (trenches) — where the warrior community is located.
+            </p>
+            <p class="mt-4 text-[var(--muted)] leading-relaxed">
+              In a crypto world full of drama, scams, and rugpull, GOATCOIN appears as a stubborn little goat — it keeps climbing, keeps holding on, until it finally becomes GOATCOIN.
+            </p>
+            <p class="mt-4 text-[var(--muted)] leading-relaxed">
+              They can't manage this market, can't sell everything. This is OG GOATCOIN of crypto -- born from anger, built for freedom,
+							And come to challenge the old order.
+            </p>
+            <div class="mt-6 flex gap-3">
+              <a href="https://dexscreener.com/solana/Gxwy8yjgsPbFyHCvSxf3K2dL598VWP6S4tNBk6qE22ZS" target="_blank" rel="noopener" class="btn btn-gold focus-ring">Buy $GOATCOIN</a>
+              <a href="https://x.com/i/communities/1973247905936056514" target="_blank" rel="noopener" class="btn btn-outline focus-ring">Join X Community</a>
+            </div>
+          </div>
+          <div class="glass p-6 reveal" style="transition-delay:120ms;">
+            <div class="text-sm uppercase tracking-wider text-[var(--muted)]">GOATCOIN Standard</div>
+            <h3 class="mt-2 text-xl font-semibold">The Meme. The Legend. The GOATCOIN.</h3>
+            <p class="mt-3 text-[var(--muted)]">
+              GOATCOIN is a meme token that was born from the trenches of the crypto world.
+From a small capsule, a legendary goat appeared - a symbol of resilience, togetherness, and community spirit.
+We are not just coins, we are The Herd. Together, we rise from the bottom... to be GOATCOIN at the top.
+            </p>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="card p-4 reveal"><div class="text-xs text-[var(--muted)]">Likuiditas</div><div class="mt-1 font-semibold">Thick Liquidity</div></div>
+              <div class="card p-4 reveal" style="transition-delay:80ms;"><div class="text-xs text-[var(--muted)]">Buybacks</div><div class="mt-1 font-semibold">Sustainable</div></div>
+              <div class="card p-4 reveal" style="transition-delay:140ms;"><div class="text-xs text-[var(--muted)]">Tokenisasi</div><div class="mt-1 font-semibold">Real GOATCOIN</div></div>
+              <div class="card p-4 reveal" style="transition-delay:200ms;"><div class="text-xs text-[var(--muted)]">Kepemilikan</div><div class="mt-1 font-semibold">Owned by the People</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 rounded-2xl border border-[var(--border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))] p-6 text-center reveal">
+          <div class="text-sm uppercase tracking-widest text-[var(--muted)]">OG Statement</div>
+          <div class="mt-2 text-2xl md:text-3xl font-bold gold-gradient">The OG GOATCOIN on Pump Fun, THE GOATCOIN of Crypto today made the big move.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="buy" class="relative">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card p-6 md:col-span-2 reveal">
+            <h3 class="text-xl font-bold">Buy $GOATCOIN</h3>
+            <p class="mt-2 text-[var(--muted)]">Choose your favorite DEX to get started.</p>
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <a href="https://dexscreener.com/solana/gxwy8yjgspbfyhcvsxf3k2dl598vwp6s4tnbk6qe22zs" target="_blank" rel="noopener" class="btn btn-gold w-full focus-ring">Dexscreener</a>
+              <a href="https://jup.ag/swap/SOL-So11111111111111111111111111111111111111112?inputMint=So11111111111111111111111111111111111111112" target="_blank" rel="noopener" class="btn btn-gold w-full focus-ring">Pump.fun</a>
+              <a href="https://raydium.io" target="_blank" rel="noopener" class="btn btn-gold w-full focus-ring">Raydium</a>
+            </div>
+            <div class="mt-6 text-xs text-[var(--muted)]">
+              Note: Make sure the contract/pair is correct before buying. The link above can be replaced with the official GOATCOIN link.
+            </div>
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <span class="badge">
+                <span class="inline-block h-3 w-3 rounded-full" style="background: var(--accent);"></span>
+                Pair: <span id="pairFull" class="font-mono">Gxwy8yjgsPbFyHCvSxf3K2dL598VWP6S4tNBk6qE22ZS</span> (Solana)
+              </span>
+              <button id="copyPair" class="btn btn-outline focus-ring text-xs" type="button" aria-label="Copy pair address">Copy</button>
+              <span id="copyNote" class="text-xs text-[var(--muted)] hidden">Copied!</span>
+            </div>
+          </div>
+          <div class="card p-6 reveal" style="transition-delay:120ms;">
+            <div class="text-sm uppercase tracking-wider text-[var(--muted)]">Live Status</div>
+            <div id="live1" class="mt-2 text-sm">Loading token data<span class="dots"></span></div>
+            <div id="live2" class="mt-2 text-sm">Loading token data<span class="dots"></span></div>
+            <div id="live3" class="mt-2 text-sm">Loading token data<span class="dots"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="community" class="relative">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass p-6 reveal">
+            <h3 class="text-xl font-bold">Join X Community</h3>
+            <p class="mt-2 text-[var(--muted)]">
+              Join the community for updates, alpha, and collaboration.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="btn btn-gold focus-ring" href="https://x.com/donjuchady" target="_blank" rel="noopener">Follow on X</a>
+              <a class="btn btn-outline focus-ring" href="https://x.com/i/communities/1973247905936056514" target="_blank" rel="noopener">Community Chat</a>
+            </div>
+          </div>
+          <div class="card p-6 reveal" style="transition-delay:120ms;">
+            <div class="text-sm uppercase tracking-wider text-[var(--muted)]">Announcements</div>
+            <ul class="mt-3 space-y-2 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full" style="background: var(--accent);"></span>
+                Minted 2 years ago, stayed undiscovered... until today.
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full" style="background: var(--accent);"></span>
+                OG GOATCOIN of crypto -- built for freedom.
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full" style="background: var(--accent);"></span>
+                Buybacks, liquidity, and real GOATCOIN tokenization.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-[var(--border)]" role="contentinfo">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 py-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <!-- Logo kuning dihapus -->
+        <div class="font-extrabold tracking-wide gold-gradient">GOATCOIN</div>
+      </div>
+      <div class="text-xs text-[var(--muted)]">
+        © <span id="year"></span> GOATCOIN. All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script>
+    const PAIR_ADDRESS = "Fva4SoWzSBvdw7XX2jLDrrXsLmQTjy86aT9wA4aiT21P";
+const DEXSCREENER_URL = `https://api.dexscreener.com/latest/dex/pairs/solana/${PAIR_ADDRESS}`;
+
+    const el = {
+      tokenData: document.getElementById('tokenData'),
+      liquidityData: document.getElementById('liquidityData'),
+      holdersData: document.getElementById('holdersData'),
+      live1: document.getElementById('live1'),
+      live2: document.getElementById('live2'),
+      live3: document.getElementById('live3'),
+    };
+
+    function n(v, opts = {}) {
+      const { max = 2, compact = true, currency = false } = opts;
+      const val = (typeof v === 'string') ? Number(v) : v;
+      if (val === null || val === undefined || Number.isNaN(val)) return '--';
+      try {
+        if (currency) {
+          return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: max }).format(val);
+        }
+        if (compact) {
+          return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: max }).format(val);
+        }
+        return new Intl.NumberFormat('en-US', { maximumFractionDigits: max }).format(val);
+      } catch {
+        return String(val);
+      }
+    }
+
+    function pct(v, max=2) {
+      const val = (typeof v === 'string') ? Number(v) : v;
+      if (val === undefined || val === null || isNaN(val)) return '--';
+      const sign = val > 0 ? '+' : '';
+      return `${sign}${val.toFixed(max)}%`;
+    }
+
+    function setError(msg) {
+      const m = msg || 'Gagal memuat data. Coba lagi.';
+      el.tokenData.innerHTML = `<span class="text-red-300">${m}</span>`;
+      el.liquidityData.innerHTML = `<span class="text-red-300">${m}</span>`;
+      el.holdersData.innerHTML = `<span class="text-red-300">${m}</span>`;
+      el.live1.textContent = m;
+      el.live2.textContent = 'Periksa koneksi atau API rate limit.';
+      el.live3.innerHTML = `<button id="retry" class="btn btn-outline mt-1">Retry</button>`;
+      const r = document.getElementById('retry');
+      if (r) r.addEventListener('click', fetchPair, { once: true });
+    }
+
+    function withTimeout(promise, ms = 10000) {
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), ms))
+      ]);
+    }
+
+    async function fetchPair() {
+      try {
+        [el.tokenData, el.liquidityData, el.holdersData, el.live1, el.live2, el.live3].forEach(d => {
+          d.innerHTML = 'Loading token data<span class="dots"></span>';
+        });
+
+        const res = await withTimeout(fetch(DEXSCREENER_URL, { cache: 'no-store' }), 12000);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        const pair = (data && data.pairs && data.pairs[0]) ? data.pairs[0] : null;
+        if (!pair) throw new Error('Pair tidak ditemukan');
+
+        const priceUsd = pair.priceUsd ? parseFloat(pair.priceUsd) : null;
+        const fdv = pair.fdv ? Number(pair.fdv) : null;
+        const mcap = pair.marketCap ? Number(pair.marketCap) : (fdv || null);
+
+        const liqUsd = pair.liquidity && pair.liquidity.usd ? Number(pair.liquidity.usd) : null;
+        const vol24h = pair.volume && pair.volume.h24 ? Number(pair.volume.h24) : null;
+        const txCount24h = (pair.txns && pair.txns.h24) ? Number((pair.txns.h24.buys || 0) + (pair.txns.h24.sells || 0)) : null;
+
+        const change24h = (pair.priceChange && pair.priceChange.h24 !== undefined) ? Number(pair.priceChange.h24) : null;
+        const baseToken = pair.baseToken || {};
+
+        const changeClass = change24h>0?'text-emerald-400':(change24h<0?'text-rose-400':'text-[var(--muted)]');
+
+        el.tokenData.innerHTML = `
+          <div class="space-y-1">
+            <div><span class="text-[var(--muted)]">Price:</span> <span class="font-semibold">${n(priceUsd, {currency:true, max:6})}</span> <span class="${changeClass} text-xs ml-1">${change24h!==null ? pct(change24h,2) : ''}</span></div>
+            <div><span class="text-[var(--muted)]">FDV:</span> <span class="font-semibold">${n(fdv, {currency:true})}</span></div>
+            <div><span class="text-[var(--muted)]">MCap:</span> <span class="font-semibold">${n(mcap, {currency:true})}</span></div>
+            <div class="text-xs text-[var(--muted)] break-all">Base: ${baseToken.symbol || ''}</div>
+          </div>
+        `;
+
+        el.liquidityData.innerHTML = `
+          <div class="space-y-1">
+            <div><span class="text-[var(--muted)]">Pool Liquidity:</span> <span class="font-semibold">${n(liqUsd, {currency:true})}</span></div>
+            <div><span class="text-[var(--muted)]">24h Volume:</span> <span class="font-semibold">${n(vol24h, {currency:true})}</span></div>
+            <div><span class="text-[var(--muted)]">24h Tx:</span> <span class="font-semibold">${n(txCount24h, {compact:false})}</span></div>
+          </div>
+        `;
+
+        const dexsUrl = `https://dexscreener.com/solana/${PAIR_ADDRESS}`;
+        el.holdersData.innerHTML = `
+          <div class="space-y-1">
+            <div><span class="text-[var(--muted)]">Holders:</span> <span class="font-semibold">N/A</span></div>
+            <div class="text-xs text-[var(--muted)]"></div>
+            <a class="text-xs underline text-[var(--accent-2)]" href="${dexsUrl}" target="_blank" rel="noopener">Look at Dexscreener</a>
+          </div>
+        `;
+
+        el.live1.innerHTML = `<span class="text-[var(--muted)]">Status:</span> <span class="font-semibold text-emerald-300">Live</span>`;
+        el.live2.innerHTML = `<span class="text-[var(--muted)]">Pair:</span> <span class="font-mono text-xs">${PAIR_ADDRESS.slice(0,8)}...</span>`;
+        el.live3.innerHTML = `<span class="text-[var(--muted)]">24h Change:</span> <span class="font-semibold ${change24h>0?'text-emerald-400':change24h<0?'text-rose-400':'text-[var(--text)]'}">${change24h!==null ? pct(change24h,2) : '--'}</span>`;
+      } catch (e) {
+        setError(e?.message || 'Error');
+      }
+    }
+
+    // Copy pair to clipboard
+    const copyBtn = document.getElementById('copyPair');
+    const copyNote = document.getElementById('copyNote');
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(PAIR_ADDRESS);
+        copyNote?.classList.remove('hidden');
+        copyNote.textContent = 'Copied!';
+        setTimeout(() => copyNote?.classList.add('hidden'), 1500);
+      } catch {
+        copyNote?.classList.remove('hidden');
+        copyNote.textContent = 'Copy failed';
+        setTimeout(() => copyNote?.classList.add('hidden'), 1500);
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    fetchPair();
+    setInterval(fetchPair, 60000);
+
+    /* ===== Scroll Animations ===== */
+
+    // Scroll progress bar
+    const sp = document.getElementById('scrollProgress');
+    const onScrollProgress = () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+      sp.style.width = (scrolled * 100).toFixed(2) + '%';
+    };
+    document.addEventListener('scroll', onScrollProgress, { passive: true });
+    onScrollProgress();
+
+    // Reveal-on-scroll using IntersectionObserver
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          // unobserve after reveal for performance
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => io.observe(el));
+
+    // Gentle parallax for background glows
+    const glow1 = document.getElementById('glow1');
+    const glow2 = document.getElementById('glow2');
+    let lastY = window.scrollY;
+    let ticking = false;
+    function parallaxTick() {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      lastY = y;
+      // subtle movement
+      const p1 = (y * 0.04);
+      const p2 = -(y * 0.03);
+      glow1 && glow1.style.setProperty('--pY', p1 + 'px');
+      glow2 && glow2.style.setProperty('--pY', p2 + 'px');
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(parallaxTick);
+        ticking = true;
+      }
+    }, { passive: true });
+    parallaxTick();
+
+    // Optional: reduce motion respect
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function applyReducedMotion(e) {
+      const reduce = e.matches;
+      document.documentElement.style.setProperty('--motion-mult', reduce ? '0' : '1');
+      if (reduce) {
+        // Stop marquee animation and parallax if user prefers reduced motion
+        const track = document.querySelector('.marquee-track');
+        if (track) track.style.animation = 'none';
+        window.removeEventListener('scroll', onScrollProgress);
+      }
+    }
+    mq.addEventListener?.('change', applyReducedMotion);
+    applyReducedMotion(mq);
+  </script>
+</body>
+</html>
